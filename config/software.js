@@ -9,7 +9,21 @@
  */
 /* eslint-disable no-inner-declarations, no-nested-ternary, no-sequences, no-unused-vars */
 
-function decrypt( args ) { // The same function can be used to encode text
+// MY COMMANDS:
+
+/**
+ * This software will act like a glossary for the players.
+ * @param {any} args The entity the user is looking for information on.
+ */
+function archive(args) {
+    if (args.length === 0) {
+        return "<p>An argument must be provided.</p>";
+    }
+    // Search "archive.json" for a match of the string and display the "Description" field.
+}
+
+// DEMO COMMANDS:
+function decrypt(args) { // The same function can be used to encode text
     if ( args.length === 0 ) {
         return "<p>Some encrypted text must be provided: <code>decrypt 53CR3T T3XT</code></p>";
     }
@@ -154,5 +168,14 @@ const DWEETS = {
             }
             x.fillRect( S + 96, T + 54, C( Math.atan2( S, T, r ) * 9 ) * 20 - r & 44 && r > 36 ? r < 42 ? T / R : S / R : 1, r > 36 ? r < R : z( 3 ) / 5 );
         }
-    }, 198, 100 )
+    }, 198, 100),
+    855: () => dweet((t, x) => { // FROM: https://www.dwitter.net/d/855
+    const r = 480;
+    c.width = r * 4;
+    λ = 0;
+    for (φ = a = Math.PI / 2; φ > -a; φ -= 1 / r) {
+        λ += a;
+        x.lineTo(C(φ) * S(λ - t) * r + 2 * r, (C(t = t + 1 / r) * S(φ) + S(t) * C(φ) * C(λ - t)) * r + r)
+    } x.stroke()
+    }, )
 };

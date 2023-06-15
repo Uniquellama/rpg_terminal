@@ -126,7 +126,7 @@ function Terminal() {
             args = args.splice( 1 ); // Remove cmd from arg list.
 
             /**
-             * The kernel function is at src/softwares.js
+             * The kernel function is at src/kernel.js
              *
              * If need to know more about Promises, read the following:
              * https://stackoverflow.com/questions/14220321/how-do-i-return-the-response-from-an-asynchronous-call
