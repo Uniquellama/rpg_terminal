@@ -1,0 +1,12 @@
+{
+    "serverAddress": "2001:db8:a0b:12f0::1",
+    "serverName": "Asteria",
+    "iconName": "world.svg",
+    "terminalID": "prot-node-163096",
+    "defaultUser": {
+        "userId": "user",
+        "password": "",
+        "userName": "unknown-user"
+    },
+    "randomSeed": true
+}

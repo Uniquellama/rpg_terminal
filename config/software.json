@@ -32,8 +32,13 @@
             "<img src=\"https://thispersondoesnotexist.com/image\" title=\"tHeY aRe NoT hUmAn\" style=\"width: 10rem; max-width: 100%;\">"
         ]
     },
+    "archive.exe":  {
+        "location": ["2001:db8:a0b:12f0::1"],
+        "message": [
+            "archive is a wip..."
+        ]
+    },
     "artifact": {},
     "decrypt": {},
-    "identify": {},
-    "archive":  {}
+    "identify": {}
 }

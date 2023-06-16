@@ -189,6 +189,7 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                 $.get( `config/network/${ serverInfo.serverAddress }/userlist.json`, ( users ) => {
                     const matchingUser = users.find( ( user ) => user.userId === userName );
                     if ( !matchingUser ) {
+                        print("NOT MATCHING USER");
                         reject( new UnknownUserError( userName ) );
                         return;
                     }
@@ -233,7 +234,7 @@ kernel.init = function init( cmdLineContainer, outputContainer ) {
             $.get( "config/software.json", ( softwareData ) => {
                 softwareInfo = softwareData;
             } ),
-            kernel.connectToServer( "localhost" )
+            kernel.connectToServer( "2001:db8:a0b:12f0::1" )
         )
             .done( () => {
                 resolve( true );
