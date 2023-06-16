@@ -7,6 +7,13 @@ class CommandNotFoundError extends Error {
     }
 }
 
+class NoArgumentsError extends Error {
+    constructor() {
+        super();
+        this.message = "Error: No arguments provided";
+    }
+}
+
 class InvalidCommandParameter extends Error {
     constructor( command ) {
         super();

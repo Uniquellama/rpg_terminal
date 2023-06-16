@@ -6,5 +6,8 @@
   },
   "scripts": {
     "test": "eslint --fix src/*.js"
+  },
+  "dependencies": {
+    "live-server": "^1.2.2"
   }
 }

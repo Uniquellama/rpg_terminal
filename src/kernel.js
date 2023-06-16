@@ -181,7 +181,7 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                 $.get( `config/network/${ serverInfo.serverAddress }/userlist.json`, ( users ) => {
                     userList = users;
                 } );
-                $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, (archives ) => {
+                $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
                     archiveList = archives;
                 } );
                 $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
@@ -206,6 +206,9 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                     userList = users;
                     $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
                         mailList = mails;
+                    } );
+                    $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
+                        archiveList = archives;
                     } );
                     setHeader( "Connection successful" );
                     resolve();
@@ -430,16 +433,17 @@ system = {
     archive(args) {
         return new Promise( ( resolve, reject ) => {
             if (args.length === 0) {
-                reject("<p>An argument must be provided.</p>");
+                reject(new NoArgumentsError());
+                return;
             }
-    
-            const archiveList = [];
+            const archiveResult = [];
             $.each (archiveList, (index, archive ) => {
                 if(archive.title === args[0]) {
-                    archiveList.push( `[${ index }] ${archive.description}`);
+                    archiveResult.push( `[${ index }]` );
+                    archiveResult.push( `${archive.description}` );
                 }
             } );
-            resolve(archiveList);
+            resolve(archiveResult);
         } );
     },
 
