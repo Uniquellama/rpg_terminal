@@ -14,6 +14,13 @@ class NoArgumentsError extends Error {
     }
 }
 
+class ArchiveResultNotFoundError extends Error {
+    constructor ( command ) {
+        super();
+        this.message = `Error: ${ command } not found in available records.`;
+    }
+}
+
 class InvalidCommandParameter extends Error {
     constructor( command ) {
         super();
@@ -24,7 +31,7 @@ class InvalidCommandParameter extends Error {
 class AddressNotFoundError extends Error {
     constructor( address ) {
         super();
-        this.message = `Error : address ${ address } can't be reached`;
+        this.message = `Error: address ${ address } can't be reached`;
     }
 }
 

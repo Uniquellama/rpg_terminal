@@ -432,18 +432,33 @@ system = {
 
     archive(args) {
         return new Promise( ( resolve, reject ) => {
+            const commandResult = [];
             if (args.length === 0) {
+                //TODO: This displays as "uncaught promise" when other errors don't -- why?
                 reject(new NoArgumentsError());
                 return;
             }
-            const archiveResult = [];
-            $.each (archiveList, (index, archive ) => {
-                if(archive.title === args[0]) {
-                    archiveResult.push( `[${ index }]` );
-                    archiveResult.push( `${archive.description}` );
-                }
-            } );
-            resolve(archiveResult);
+            switch(args[0]) {
+                case "-search":
+                    $.each (archiveList, (index, archive ) => {
+                    if(archive.title === args[1]) {
+                        commandResult.push( `[${ index }]` );
+                        commandResult.push( `${archive.description}` );
+                    }   
+                    });
+                    if(commandResult.length === 0) {
+                        reject(new ArchiveResultNotFoundError( args[1] ));
+                        return;
+                    }
+                break;
+                case "-help":
+                    commandResult.push("help is currently wip...");
+                    break;
+                default:
+                    reject(new CommandNotFoundError());
+                    return;
+            }
+            resolve(commandResult);
         } );
     },
 
