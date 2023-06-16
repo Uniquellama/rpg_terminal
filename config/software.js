@@ -15,12 +15,7 @@
  * This software will act like a glossary for the players.
  * @param {any} args The entity the user is looking for information on.
  */
-function archive(args) {
-    if (args.length === 0) {
-        return "<p>An argument must be provided.</p>";
-    }
-    // Search "archive.json" for a match of the string and display the "Description" field.
-}
+
 
 // DEMO COMMANDS:
 function decrypt(args) { // The same function can be used to encode text

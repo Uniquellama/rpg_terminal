@@ -3,6 +3,7 @@ let serverDatabase = {};
 let userDatabase = {};
 let userList = [];
 let mailList = [];
+let archiveList = [];
 let cmdLine_;
 let output_;
 
@@ -180,6 +181,9 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                 $.get( `config/network/${ serverInfo.serverAddress }/userlist.json`, ( users ) => {
                     userList = users;
                 } );
+                $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, (archives ) => {
+                    archiveList = archives;
+                } );
                 $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
                     mailList = mails;
                 } );
@@ -321,6 +325,8 @@ system = {
                 resolve( [ "Usage:", "> help", "The default help message. It will show some of the available commands in a server." ] );
             } else if ( args[ 0 ] === "login" ) {
                 resolve( [ "Usage:", "> login username:password", "Switch account: log in as another registered user on the server, to access your data files and messages." ] );
+            } else if ( args[ 0 ] === "archive" ) {
+                resolve( [ "Usage:", "> archive protectorate", "A glossary about the world."]);
             } else if ( args[ 0 ] === "mail" ) {
                 resolve( [ "Usage:", "> mail", "If you're logged in you can list your mail messages if any." ] );
             } else if ( args[ 0 ] === "ping" ) {
@@ -418,6 +424,22 @@ system = {
             }
 
             resolve( messageList );
+        } );
+    },
+
+    archive(args) {
+        return new Promise( ( resolve, reject ) => {
+            if (args.length === 0) {
+                reject("<p>An argument must be provided.</p>");
+            }
+    
+            const archiveList = [];
+            $.each (archiveList, (index, archive ) => {
+                if(archive.title === args[0]) {
+                    archiveList.push( `[${ index }] ${archive.description}`);
+                }
+            } );
+            resolve(archiveList);
         } );
     },
 
