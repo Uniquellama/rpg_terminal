@@ -444,6 +444,9 @@ system = {
                     if(archive.title === args[1]) {
                         commandResult.push( `[${ index }]` );
                         commandResult.push( `${archive.description}` );
+                        if(archive.dweet) {
+                            commandResult.push( internalArtifact(archive.dweet ));
+                        }
                     }   
                     });
                     if(commandResult.length === 0) {
@@ -453,6 +456,10 @@ system = {
                 break;
                 case "-help":
                     commandResult.push("help is currently wip...");
+                    break;
+                // This is only here for demo purposes - needs to be removed before release
+                case "-dweet":
+                    commandResult.push(internalArtifact(args[1]));
                     break;
                 default:
                     reject(new CommandNotFoundError());

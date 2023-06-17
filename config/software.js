@@ -48,6 +48,19 @@ function artifact( args ) {
     return artifactDweet();
 }
 
+// Use this function when displaying from the archive program - args work differently when calling it from a function
+function internalArtifact( args ) {
+    if ( args.length === 0 ) {
+        return [ "<p>An ID must be provided: <code>artifact $id</code></p>", `You currently have access to the following artifacts: ${ Object.keys( DWEETS ).join( " " ) }` ];
+    }
+    const artifactId = args;
+    const artifactDweet = DWEETS[ artifactId ];
+    if ( !artifactDweet ) {
+        return `You do not have access to the artifact with ID ${ artifactId }`;
+    }
+    return artifactDweet();
+}
+
 const DWEETS = {
     888: () => dweet( ( t, x ) => { // FROM: https://www.dwitter.net/d/888
         for ( let i = 0; i < 300; i++ ) {
@@ -163,14 +176,5 @@ const DWEETS = {
             }
             x.fillRect( S + 96, T + 54, C( Math.atan2( S, T, r ) * 9 ) * 20 - r & 44 && r > 36 ? r < 42 ? T / R : S / R : 1, r > 36 ? r < R : z( 3 ) / 5 );
         }
-    }, 198, 100),
-    855: () => dweet((t, x) => { // FROM: https://www.dwitter.net/d/855
-    const r = 480;
-    c.width = r * 4;
-    λ = 0;
-    for (φ = a = Math.PI / 2; φ > -a; φ -= 1 / r) {
-        λ += a;
-        x.lineTo(C(φ) * S(λ - t) * r + 2 * r, (C(t = t + 1 / r) * S(φ) + S(t) * C(φ) * C(λ - t)) * r + r)
-    } x.stroke()
-    }, )
+    }, 198, 100)
 };
