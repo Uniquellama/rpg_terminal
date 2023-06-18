@@ -454,17 +454,17 @@ system = {
                 });
                     break;
                 case "-dweet":
-                    commandResult.push(internalArtifact(args[1]));
+                    commandResult.push(renderDweet(args[1]));
                     break;    
                 case "-search": // Get name and description of search term
                     $.each (archiveList, (index, archive ) => {
                     if(archive.title === args[1]) {
                         commandResult.push( `[${ index }]` );
                         if(archive.dweet) {
-                            commandResult.push( internalArtifact(archive.dweet ));
+                            commandResult.push( renderDweet(archive.dweet ));
                         }
                         if(archive.image) {
-                            commandResult.push( `<img align="left" src="config/network/${ serverDatabase.serverAddress }/images/${ archive.image }" width="100" height="100" style="padding: 0px 10px 20px 0px">` )
+                            commandResult.push( `<img align="left" src="config/network/${ serverDatabase.serverAddress }/images/${ archive.image }" width="125" height="125" style="padding: 0px 10000px 20px 0px">` )
                         }
                         commandResult.push( `${archive.description}` );
                         
@@ -736,7 +736,7 @@ function dweet( u, width, height ) {
         u( time, x, c );
     }
     setTimeout( loop, 50 ); // Small delay to let time for the canvas to be inserted
-    return `<canvas id="${ id }" width="${ width }" height="${ height }">`;
+    return `<div id=canvas-container><canvas id="${ id }" width="${ width }" height="${ height }"></div>`;
 }
 
 function R( r, g, b, a ) {

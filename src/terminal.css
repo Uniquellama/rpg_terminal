@@ -52,6 +52,9 @@ body {
   color: white;
   background-color: black;
 }
+canvas {
+  background-color: black; /* or any other color that provides contrast */
+}
 #container {
   padding: .1em 1.5em 1em 1em;
 }

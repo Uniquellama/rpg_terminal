@@ -49,7 +49,7 @@ function artifact( args ) {
 }
 
 // Use this function when displaying from the archive program - args work differently when calling it from a function
-function internalArtifact( args ) {
+function renderDweet( args ) {
     if ( args.length === 0 ) {
         return [ "<p>An ID must be provided: <code>artifact $id</code></p>", `You currently have access to the following artifacts: ${ Object.keys( DWEETS ).join( " " ) }` ];
     }
@@ -178,16 +178,32 @@ const DWEETS = {
         }
     }, 198, 100),
     // DOESN'T WORK :(
-    12755: () => dweet ( ( t, x ) => { // FROM: https://www.dwitter.net/d/12755
-        x.fillRect( 0, 0, 1920, 1080 );
-        let X = C( t / 2 ) * 6 + 16;
-        let Y = S( t / 2.1 ) * 6 + 9;
+    12755: () => dweet ( (t, x) => { // FROM: https://www.dwitter.net/d/12755
+        x.fillRect(0, 0, 1920, 1080);
+        let X = Math.cos(t / 2) * 6 + 16;
+        let Y = Math.sin(t / 2.1) * 6 + 9;
         x.globalAlpha = 0.05;
-        for( let i = 99; i--; ) {
-            let Z = S( Y );
-            Y += C( X );
-            X += Z;
-            x.clearRect( X * 60, Y * 60, 5, 5 );
-        } 
-    }, 1920, 1080)
-};
+        for (let i = 99; i--; ) {
+          const Z = Math.sin(Y);
+          Y += Math.cos(X);
+          X += Z;
+          x.clearRect(X * 60, Y * 60, 5, 5);
+        }
+      }, 500, 500 ),
+    27831: () => dweet ( (t, x) => {
+        const w = 2000; // Adjust the canvas width
+        x.fillRect(0, 0, w, w);
+  
+        for (let i = 10000; i--; ) {
+            const p = i * i - t / 9;
+            const Z = i / (Math.sin(t + i + p) + i * p * i / 320) / i / i;
+    
+            const X = 960 + Math.cos(p) / Z;
+            const Y = 540 + Math.sin(p) / Z;
+            const K = 3 * Math.sin(i);
+    
+            x.clearRect(X, Y, K, K);
+            x.globalAlpha = 0.1;
+        }
+    })
+    };
