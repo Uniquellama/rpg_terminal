@@ -9,6 +9,16 @@
             "A militaristic faction risen from the remains of the Earthen Protectorate that once colonised this planet. They maintain order through harsh rule, often finding themselves in skirmishes with local crime lords. Despite their militarism they often provide resources to struggling villages on the outskirts of civilisation helping them survive the harsh weather, although not without a price, they must allow the protectorate to establish a foothold in said village and spread their influence.",
         "dweet": "888"
     },
+    "chaos_protectorate": {
+        "title": "chaos_protectorate",
+        "tags": [
+            "chaos_protectorate",
+            "faction"
+        ],
+        "description":
+            "Founded by a Protectorate general that survived an assassination attempt. Operates as an independent group controlling a small area of territory near the power plants.",
+        "image": "protectorate.jpg"
+    },
     "capital": {
         "title": "capital",
         "tags": [

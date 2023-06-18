@@ -1,0 +1,27 @@
+{
+    "help": {
+        "command": "-help",
+        "description": "Display this help output. Lists all available commands and what they do with a usage example.",
+        "usage": "archive -help"
+    },
+    "search": {
+        "command": "-search",
+        "description": "Display archive record for provided search term. Terms must match exactly.",
+        "usage": "archive -search protectorate"
+    },
+    "list": {
+        "command": "-list",
+        "description": "List all available records.",
+        "usage": "archive -list"
+    },
+    "search-tags": {
+        "command": "-search-tags",
+        "description": "List all available records associated with the provided tag.",
+        "usage": "archive -search-tags faction"
+    },
+    "list-tags": {
+        "command": "-list-tags",
+        "description": "List all unique tags within the archives.",
+        "usage": "archive -list-tags"
+    }
+}

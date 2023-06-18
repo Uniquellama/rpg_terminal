@@ -4,6 +4,7 @@ let userDatabase = {};
 let userList = [];
 let mailList = [];
 let archiveList = [];
+let archiveHelpList = [];
 let cmdLine_;
 let output_;
 
@@ -184,6 +185,9 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                 $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
                     archiveList = archives;
                 } );
+                $.get( `config/network/${ serverInfo.serverAddress }/archive-help.json`, ( archives ) => {
+                    archiveHelpList = archives;
+                } );
                 $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
                     mailList = mails;
                 } );
@@ -209,6 +213,9 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
                     } );
                     $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
                         archiveList = archives;
+                    } );
+                    $.get( `config/network/${ serverInfo.serverAddress }/archive-help.json`, ( archives ) => {
+                        archiveHelpList = archives;
                     } );
                     setHeader( "Connection successful" );
                     resolve();
@@ -439,14 +446,28 @@ system = {
                 return;
             }
             switch(args[0]) {
-                case "-search":
+                case "-help": // All available archive commands
+                $.each (archiveHelpList, (index, help) => {
+                    commandResult.push(`[ ${help.command} ]: ${help.description}`);
+                    commandResult.push(`usage: ${help.usage}`);
+                    commandResult.push("-----------------------------------------------------------------------------------------------------------------------");
+                });
+                    break;
+                case "-dweet":
+                    commandResult.push(internalArtifact(args[1]));
+                    break;    
+                case "-search": // Get name and description of search term
                     $.each (archiveList, (index, archive ) => {
                     if(archive.title === args[1]) {
                         commandResult.push( `[${ index }]` );
-                        commandResult.push( `${archive.description}` );
                         if(archive.dweet) {
                             commandResult.push( internalArtifact(archive.dweet ));
                         }
+                        if(archive.image) {
+                            commandResult.push( `<img align="left" src="config/network/${ serverDatabase.serverAddress }/images/${ archive.image }" width="100" height="100" style="padding: 0px 10px 20px 0px">` )
+                        }
+                        commandResult.push( `${archive.description}` );
+                        
                     }   
                     });
                     if(commandResult.length === 0) {
@@ -454,12 +475,35 @@ system = {
                         return;
                     }
                 break;
-                case "-help":
-                    commandResult.push("help is currently wip...");
+                case "-list":
+                    $.each (archiveList, (index) => {
+                        commandResult.push(`[${index}]`);
+                    })
                     break;
-                // This is only here for demo purposes - needs to be removed before release
-                case "-dweet":
-                    commandResult.push(internalArtifact(args[1]));
+                case "-list-tags": // List all available tags
+                    var tagList = [];
+                    $.each (archiveList, (index, archive ) => {
+                        archive.tags.forEach(tag => {
+                            tagList.push(tag);
+                        })
+                    })
+                    var uniqueTagList = [...new Set(tagList)];
+                    uniqueTagList.forEach(tag => {
+                        commandResult.push(`[${tag}]`);
+                    })
+                    break;
+                case "-search-tags": // List all entries with specified tag
+                    $.each (archiveList, (index, archive ) => {
+                        archive.tags.forEach(tag => {
+                            if(tag === args[1]) {
+                                commandResult.push(`[${index}]`);
+                            }
+                        })
+                        });
+                        if(commandResult.length === 0) {
+                            reject(new ArchiveResultNotFoundError( args[1] ));
+                            return;
+                        }
                     break;
                 default:
                     reject(new CommandNotFoundError());

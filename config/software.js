@@ -176,5 +176,18 @@ const DWEETS = {
             }
             x.fillRect( S + 96, T + 54, C( Math.atan2( S, T, r ) * 9 ) * 20 - r & 44 && r > 36 ? r < 42 ? T / R : S / R : 1, r > 36 ? r < R : z( 3 ) / 5 );
         }
-    }, 198, 100)
+    }, 198, 100),
+    // DOESN'T WORK :(
+    12755: () => dweet ( ( t, x ) => { // FROM: https://www.dwitter.net/d/12755
+        x.fillRect( 0, 0, 1920, 1080 );
+        let X = C( t / 2 ) * 6 + 16;
+        let Y = S( t / 2.1 ) * 6 + 9;
+        x.globalAlpha = 0.05;
+        for( let i = 99; i--; ) {
+            let Z = S( Y );
+            Y += C( X );
+            X += Z;
+            x.clearRect( X * 60, Y * 60, 5, 5 );
+        } 
+    }, 1920, 1080)
 };
