@@ -3,5 +3,10 @@
         "userId": "arcadus",
         "password": "xelia",
         "userName": "arcadus"
+    },
+    {
+        "userId": "caelius",
+        "password": "xelia",
+        "userName": "caelius"
     }
 ]

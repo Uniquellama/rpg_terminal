@@ -8,10 +8,10 @@ let archiveHelpList = [];
 let cmdLine_;
 let output_;
 
-function debugObject( obj ) {
-    for ( const property in obj ) {
-        console.log( `${ property }: ${ JSON.stringify( obj[ property ] ) }` );
-        output( `${ property }: ${ JSON.stringify( obj[ property ] ) }` );
+function debugObject(obj) {
+    for (const property in obj) {
+        console.log(`${property}: ${JSON.stringify(obj[property])}`);
+        output(`${property}: ${JSON.stringify(obj[property])}`);
     }
 }
 
@@ -22,29 +22,29 @@ function debugObject( obj ) {
  *
  * @param {String} msg A message to be showed when done
  */
-function setHeader( msg = "⠀" ) {
+function setHeader(msg = "⠀") {
     // Setting correct header icon and terminal name
     const date = new Date();
-    if ( serverDatabase.year ) {
-        date.setYear( serverDatabase.year );
+    if (serverDatabase.year) {
+        date.setYear(serverDatabase.year);
     }
-    const promptText = `[${ userDatabase.userName }@${ serverDatabase.terminalID }] # `;
+    const promptText = `[${userDatabase.userName}@${serverDatabase.terminalID}] # `;
 
-    const dateStr = `${ date.getDate() }/${ ( 1 + date.getMonth() ).toString().padStart( 2, "0" ) }/${ 1900 + date.getYear() }`;
+    const dateStr = `${date.getDate()}/${(1 + date.getMonth()).toString().padStart(2, "0")}/${1900 + date.getYear()}`;
     const header = `
-    <img align="left" src="config/network/${ serverDatabase.serverAddress }/${ serverDatabase.iconName }" width="100" height="100" style="padding: 0px 10px 20px 0px">
-    <h2 style="letter-spacing: 4px">${ serverDatabase.serverName }</h2>
-    <p>Logged in: ${ serverDatabase.serverAddress } ( ${ dateStr } ) </p>
+    <img align="left" src="config/network/${serverDatabase.serverAddress}/${serverDatabase.iconName}" width="100" height="100" style="padding: 0px 10px 20px 0px">
+    <h2 style="letter-spacing: 4px">${serverDatabase.serverName}</h2>
+    <p>Logged in: ${serverDatabase.serverAddress} ( ${dateStr} ) </p>
     <p>Enter "help" for more information.</p>
     `;
     // Clear content:
     output_.innerHTML = "";
     cmdLine_.value = "";
-    if ( term ) {
-        term.loadHistoryFromLocalStorage( serverDatabase.initialHistory );
+    if (term) {
+        term.loadHistoryFromLocalStorage(serverDatabase.initialHistory);
     }
-    output( [ header, msg ] );
-    $( ".prompt" ).html( promptText );
+    output([header, msg]);
+    $(".prompt").html(promptText);
 }
 
 /**
@@ -55,9 +55,9 @@ function setHeader( msg = "⠀" ) {
 function getDocHeight_() {
     const doc = document;
     return Math.max(
-        Math.max( doc.body.scrollHeight, doc.documentElement.scrollHeight ),
-        Math.max( doc.body.offsetHeight, doc.documentElement.offsetHeight ),
-        Math.max( doc.body.clientHeight, doc.documentElement.clientHeight )
+        Math.max(doc.body.scrollHeight, doc.documentElement.scrollHeight),
+        Math.max(doc.body.offsetHeight, doc.documentElement.offsetHeight),
+        Math.max(doc.body.clientHeight, doc.documentElement.clientHeight)
     );
 }
 
@@ -65,7 +65,7 @@ function getDocHeight_() {
  * Scroll to bottom and clear the input value for a new line.
  */
 function newLine() {
-    window.scrollTo( 0, getDocHeight_() );
+    window.scrollTo(0, getDocHeight_());
     cmdLine_.value = ""; // Clear/setup line for next input.
 }
 
@@ -75,28 +75,28 @@ function newLine() {
  * @param {String} data The string to be returned as a print in terminal
  * @param {Array} data The array to be returned as a print in terminal
  */
-function output( data ) {
-    return new Promise( ( resolve ) => {
+function output(data) {
+    return new Promise((resolve) => {
         let delayed = 0;
 
-        if ( data && data.constructor === Object ) {
+        if (data && data.constructor === Object) {
             delayed = data.delayed;
             data = data.text;
         }
 
-        if ( data && data.constructor === Array ) {
-            if ( delayed && data.length > 0 ) {
-                outputLinesWithDelay( data, delayed, () => resolve( newLine() ) );
+        if (data && data.constructor === Array) {
+            if (delayed && data.length > 0) {
+                outputLinesWithDelay(data, delayed, () => resolve(newLine()));
                 return;
             }
-            $.each( data, ( _, value ) => {
-                printLine( value );
-            } );
-        } else if ( data ) {
-            printLine( data );
+            $.each(data, (_, value) => {
+                printLine(value);
+            });
+        } else if (data) {
+            printLine(data);
         }
-        resolve( newLine() );
-    } );
+        resolve(newLine());
+    });
 }
 
 /**
@@ -105,12 +105,12 @@ function output( data ) {
  * @param {Array} lines list of content to display
  * @param {Number} delayed delay in milliseconds between which to display lines
  */
-function outputLinesWithDelay( lines, delayed, resolve ) {
+function outputLinesWithDelay(lines, delayed, resolve) {
     const line = lines.shift();
-    printLine( line );
-    if ( lines.length > 0 ) {
-        setTimeout( outputLinesWithDelay, delayed, lines, resolve, delayed );
-    } else if ( resolve ) {
+    printLine(line);
+    if (lines.length > 0) {
+        setTimeout(outputLinesWithDelay, delayed, lines, resolve, delayed);
+    } else if (resolve) {
         resolve();
     }
 }
@@ -121,25 +121,25 @@ function outputLinesWithDelay( lines, delayed, resolve ) {
  * @param {String} data text to display
  * @param {Object} data information on what to display
  */
-function printLine( data ) {
-    if ( !data.startsWith( "<" ) ) {
-        data = `<p>${ data }</p>`;
+function printLine(data) {
+    if (!data.startsWith("<")) {
+        data = `<p>${data}</p>`;
     }
-    output_.insertAdjacentHTML( "beforeEnd", data );
+    output_.insertAdjacentHTML("beforeEnd", data);
     const elemInserted = output_.lastChild;
-    if ( elemInserted.classList ) { // can be undefined if elemInserted is just Text, not an HTMLElement
-        if ( elemInserted.classList.contains( "glitch" ) ) {
-            glitchImage( elemInserted );
+    if (elemInserted.classList) { // can be undefined if elemInserted is just Text, not an HTMLElement
+        if (elemInserted.classList.contains("glitch")) {
+            glitchImage(elemInserted);
         }
-        if ( elemInserted.classList.contains( "particle" ) ) {
-            particleImage( elemInserted );
+        if (elemInserted.classList.contains("particle")) {
+            particleImage(elemInserted);
         }
-        if ( elemInserted.classList.contains( "hack-reveal" ) ) {
-            hackRevealText( elemInserted, elemInserted.dataset );
+        if (elemInserted.classList.contains("hack-reveal")) {
+            hackRevealText(elemInserted, elemInserted.dataset);
         }
     }
     const text = elemInserted.textContent.trim();
-    if ( elemInserted.dataset && text ) { // can be undefined if elemInserted is just Text, not an HTMLElement
+    if (elemInserted.dataset && text) { // can be undefined if elemInserted is just Text, not an HTMLElement
         elemInserted.dataset.text = text; // needed for "desync" effect
     }
 }
@@ -157,78 +157,78 @@ function printLine( data ) {
  * @param {String} app The app name
  * @param {Array} args A list of Strings as args
  */
-function kernel( app, args ) {
-    const systemApp = system[ app ] || system[ app.replace( ".", "_" ) ];
-    if ( systemApp ) {
-        return systemApp( args );
+function kernel(app, args) {
+    const systemApp = system[app] || system[app.replace(".", "_")];
+    if (systemApp) {
+        return systemApp(args);
     }
-    return software( app, args );
+    return software(app, args);
 }
 
 /**
  * Attempts to connect to a server.
  * If successful, sets global variables serverDatabase / userDatabase / userList / mailList
  */
-kernel.connectToServer = function connectToServer( serverAddress, userName, passwd ) {
-    return new Promise( ( resolve, reject ) => {
-        if ( serverAddress === serverDatabase.serverAddress ) {
-            reject( new AlreadyOnServerError( serverAddress ) );
+kernel.connectToServer = function connectToServer(serverAddress, userName, passwd) {
+    return new Promise((resolve, reject) => {
+        if (serverAddress === serverDatabase.serverAddress) {
+            reject(new AlreadyOnServerError(serverAddress));
             return;
         }
-        $.get( `config/network/${ serverAddress }/manifest.json`, ( serverInfo ) => {
-            if ( !userName && serverInfo.defaultUser ) {
+        $.get(`config/network/${serverAddress}/manifest.json`, (serverInfo) => {
+            if (!userName && serverInfo.defaultUser) {
                 serverDatabase = serverInfo;
                 userDatabase = serverInfo.defaultUser;
-                $.get( `config/network/${ serverInfo.serverAddress }/userlist.json`, ( users ) => {
+                $.get(`config/network/${serverInfo.serverAddress}/userlist.json`, (users) => {
                     userList = users;
-                } );
-                $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
+                });
+                $.get(`config/network/${serverInfo.serverAddress}/archive.json`, (archives) => {
                     archiveList = archives;
-                } );
-                $.get( `config/network/${ serverInfo.serverAddress }/archive-help.json`, ( archives ) => {
+                });
+                $.get(`config/network/${serverInfo.serverAddress}/archive-help.json`, (archives) => {
                     archiveHelpList = archives;
-                } );
-                $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
+                });
+                $.get(`config/network/${serverInfo.serverAddress}/mailserver.json`, (mails) => {
                     mailList = mails;
-                } );
-                setHeader( "Connection successful" );
+                });
+                setHeader("Connection successful");
                 resolve();
-            } else if ( userName ) {
-                $.get( `config/network/${ serverInfo.serverAddress }/userlist.json`, ( users ) => {
-                    const matchingUser = users.find( ( user ) => user.userId === userName );
-                    if ( !matchingUser ) {
+            } else if (userName) {
+                $.get(`config/network/${serverInfo.serverAddress}/userlist.json`, (users) => {
+                    const matchingUser = users.find((user) => user.userId === userName);
+                    if (!matchingUser) {
                         print("NOT MATCHING USER");
-                        reject( new UnknownUserError( userName ) );
+                        reject(new UnknownUserError(userName));
                         return;
                     }
-                    if ( matchingUser.password && matchingUser.password !== passwd ) {
-                        reject( new InvalidPasswordError( userName ) );
+                    if (matchingUser.password && matchingUser.password !== passwd) {
+                        reject(new InvalidPasswordError(userName));
                         return;
                     }
                     serverDatabase = serverInfo;
                     userDatabase = matchingUser;
                     userList = users;
-                    $.get( `config/network/${ serverInfo.serverAddress }/mailserver.json`, ( mails ) => {
+                    $.get(`config/network/${serverInfo.serverAddress}/mailserver.json`, (mails) => {
                         mailList = mails;
-                    } );
-                    $.get( `config/network/${ serverInfo.serverAddress }/archive.json`, ( archives ) => {
+                    });
+                    $.get(`config/network/${serverInfo.serverAddress}/archive.json`, (archives) => {
                         archiveList = archives;
-                    } );
-                    $.get( `config/network/${ serverInfo.serverAddress }/archive-help.json`, ( archives ) => {
+                    });
+                    $.get(`config/network/${serverInfo.serverAddress}/archive-help.json`, (archives) => {
                         archiveHelpList = archives;
-                    } );
-                    setHeader( "Connection successful" );
+                    });
+                    setHeader("Connection successful");
                     resolve();
-                } ).fail( () => {
-                    reject( new AddressNotFoundError( serverAddress ) );
-                } );
+                }).fail(() => {
+                    reject(new AddressNotFoundError(serverAddress));
+                });
             } else {
-                reject( new ServerRequireUsernameError( serverAddress ) );
+                reject(new ServerRequireUsernameError(serverAddress));
             }
-        } ).fail( () => {
-            reject( new AddressNotFoundError( serverAddress ) );
-        } );
-    } );
+        }).fail(() => {
+            reject(new AddressNotFoundError(serverAddress));
+        });
+    });
 };
 
 /**
@@ -239,25 +239,25 @@ kernel.connectToServer = function connectToServer( serverAddress, userName, pass
  * @param {Object} cmdLineContainer The Input.cmdline right of the div.prompt
  * @param {Object} outputContainer The output element inside the div#container
  */
-kernel.init = function init( cmdLineContainer, outputContainer ) {
-    return new Promise( ( resolve, reject ) => {
-        cmdLine_ = document.querySelector( cmdLineContainer );
-        output_ = document.querySelector( outputContainer );
+kernel.init = function init(cmdLineContainer, outputContainer) {
+    return new Promise((resolve, reject) => {
+        cmdLine_ = document.querySelector(cmdLineContainer);
+        output_ = document.querySelector(outputContainer);
 
         $.when(
-            $.get( "config/software.json", ( softwareData ) => {
-                softwareInfo = softwareData;
-            } ),
-            kernel.connectToServer( "2001:db8:a0b:12f0::1" )
+            $.get("config/software.json", (softwareData) => {
+                softwareInfo = softwareData.software;
+            }),
+            kernel.connectToServer("2001:db8:a0b:12f0::1")
         )
-            .done( () => {
-                resolve( true );
-            } )
-            .fail( ( err, msg, details ) => {
-                console.error( err, msg, details );
-                reject( new JsonFetchParseError( msg ) );
-            } );
-    } );
+            .done(() => {
+                resolve(true);
+            })
+            .fail((err, msg, details) => {
+                console.error(err, msg, details);
+                reject(new JsonFetchParseError(msg));
+            });
+    });
 };
 
 /**
@@ -268,88 +268,88 @@ kernel.init = function init( cmdLineContainer, outputContainer ) {
  */
 system = {
     dumpdb() {
-        return new Promise( () => {
-            output( ":: serverDatabase - connected server information" );
-            debugObject( serverDatabase );
-            output( "----------" );
-            output( ":: userDatabase - connected user information" );
-            debugObject( userDatabase );
-            output( "----------" );
-            output( ":: userList - list of users registered in the connected server" );
-            debugObject( userList );
-        } );
+        return new Promise(() => {
+            output(":: serverDatabase - connected server information");
+            debugObject(serverDatabase);
+            output("----------");
+            output(":: userDatabase - connected user information");
+            debugObject(userDatabase);
+            output("----------");
+            output(":: userList - list of users registered in the connected server");
+            debugObject(userList);
+        });
     },
 
     whoami() {
-        return new Promise( ( resolve ) => {
+        return new Promise((resolve) => {
             resolve(
-                `${ serverDatabase.serverAddress }/${ userDatabase.userId }`
+                `${serverDatabase.serverAddress}/${userDatabase.userId}`
             );
-        } );
+        });
     },
 
     clear() {
-        return new Promise( ( resolve ) => {
+        return new Promise((resolve) => {
             setHeader();
-            resolve( false );
-        } );
+            resolve(false);
+        });
     },
 
     date() {
-        return new Promise( ( resolve ) => {
+        return new Promise((resolve) => {
             const date = new Date();
-            if ( serverDatabase.year ) {
-                date.setYear( serverDatabase.year );
+            if (serverDatabase.year) {
+                date.setYear(serverDatabase.year);
             }
-            resolve( String( date ) );
-        } );
+            resolve(String(date));
+        });
     },
 
-    echo( args ) {
-        return new Promise( ( resolve ) => {
-            resolve( args.join( " " ) );
-        } );
+    echo(args) {
+        return new Promise((resolve) => {
+            resolve(args.join(" "));
+        });
     },
 
-    help( args ) {
-        return new Promise( ( resolve ) => {
+    help(args) {
+        return new Promise((resolve) => {
             const programs = allowedSoftwares();
-            if ( args.length === 0 ) {
-                const commands = Object.keys( system ).filter( ( cmd ) => cmd !== "dumpdb" );
-                Array.prototype.push.apply( commands, Object.keys( programs ).filter( ( pName ) => !programs[ pName ].secretCommand ) );
+            if (args.length === 0) {
+                const commands = Object.keys(system).filter((cmd) => cmd !== "dumpdb");
+                Array.prototype.push.apply(commands, Object.keys(programs).filter((pName) => !programs[pName].secretCommand));
                 commands.sort();
-                resolve( [
+                resolve([
                     "You can read the help of a specific command by entering as follows: 'help commandName'",
                     "List of useful commands:",
-                    `<div class="ls-files">${ commands.join( "<br>" ) }</div>`,
+                    `<div class="ls-files">${commands.join("<br>")}</div>`,
                     "You can navigate in the commands usage history using the UP & DOWN arrow keys.",
                     "The TAB key will provide command auto-completion."
-                ] );
-            } else if ( args[ 0 ] === "clear" ) {
-                resolve( [ "Usage:", "> clear", "The clear command will completely wipeout the entire screen, but it will not affect the history." ] );
-            } else if ( args[ 0 ] === "date" ) {
-                resolve( [ "Usage:", "> date", "The date command will print the current date-time into terminal." ] );
-            } else if ( args[ 0 ] === "echo" ) {
-                resolve( [ "Usage:", "> echo args", "The echo command will print args into terminal." ] );
-            } else if ( args[ 0 ] === "help" ) {
-                resolve( [ "Usage:", "> help", "The default help message. It will show some of the available commands in a server." ] );
-            } else if ( args[ 0 ] === "login" ) {
-                resolve( [ "Usage:", "> login username:password", "Switch account: log in as another registered user on the server, to access your data files and messages." ] );
-            } else if ( args[ 0 ] === "archive" ) {
-                resolve( [ "Usage:", "> archive protectorate", "A glossary about the world."]);
-            } else if ( args[ 0 ] === "mail" ) {
-                resolve( [ "Usage:", "> mail", "If you're logged in you can list your mail messages if any." ] );
-            } else if ( args[ 0 ] === "ping" ) {
-                resolve( [
+                ]);
+            } else if (args[0] === "clear") {
+                resolve(["Usage:", "> clear", "The clear command will completely wipeout the entire screen, but it will not affect the history."]);
+            } else if (args[0] === "date") {
+                resolve(["Usage:", "> date", "The date command will print the current date-time into terminal."]);
+            } else if (args[0] === "echo") {
+                resolve(["Usage:", "> echo args", "The echo command will print args into terminal."]);
+            } else if (args[0] === "help") {
+                resolve(["Usage:", "> help", "The default help message. It will show some of the available commands in a server."]);
+            } else if (args[0] === "login") {
+                resolve(["Usage:", "> login username:password", "Switch account: log in as another registered user on the server, to access your data files and messages."]);
+            } else if (args[0] === "archive") {
+                resolve(["Usage:", "> archive protectorate", "A glossary about the world."]);
+            } else if (args[0] === "mail") {
+                resolve(["Usage:", "> mail", "If you're logged in you can list your mail messages if any."]);
+            } else if (args[0] === "ping") {
+                resolve([
                     "Usage:",
                     "> ping address",
                     "The ping command will try to reach a valid address.",
                     "If the ping doesn't return a valid response, the address may be incorrect, may not exist or can't be reached locally."
-                ] );
-            } else if ( args[ 0 ] === "read" ) {
-                resolve( [ "Usage:", "> read x", "If you're logged in you can read your mail messages if any." ] );
-            } else if ( args[ 0 ] === "ssh" ) {
-                resolve( [
+                ]);
+            } else if (args[0] === "read") {
+                resolve(["Usage:", "> read x", "If you're logged in you can read your mail messages if any."]);
+            } else if (args[0] === "ssh") {
+                resolve([
                     "Usage:",
                     "> ssh address",
                     "> ssh username@address",
@@ -357,244 +357,278 @@ system = {
                     "You can connect to a valid address to access a specific server on the Internet.",
                     "You may need to specify a username if the server has no default user.",
                     "You may need to specify a password if the user account is protected."
-                ] );
-            } else if ( args[ 0 ] === "whoami" ) {
-                resolve( [ "Usage:", "> whoami", "Display the server you are currently connected to, and the login you are registered with." ] );
-            } else if ( args[ 0 ] in softwareInfo ) {
-                const customProgram = programs[ args[ 0 ] ];
-                if ( customProgram.help ) {
-                    resolve( [ "Usage:", `> ${ args[ 0 ] }`, customProgram.help ] );
+                ]);
+            } else if (args[0] === "whoami") {
+                resolve(["Usage:", "> whoami", "Display the server you are currently connected to, and the login you are registered with."]);
+            } else if (args[0] in softwareInfo) {
+                const customProgram = programs[args[0]];
+                if (customProgram.help) {
+                    resolve(["Usage:", `> ${args[0]}`, customProgram.help]);
                 }
-            } else if ( args[ 0 ] in system && args[ 0 ] !== "dumpdb" ) {
-                console.error( `Missing help message for system command: ${ args[ 0 ] }` );
+            } else if (args[0] in system && args[0] !== "dumpdb") {
+                console.error(`Missing help message for system command: ${args[0]}`);
             } else {
-                resolve( [ `Unknow command ${ args[ 0 ] }` ] );
+                resolve([`Unknow command ${args[0]}`]);
             }
-        } );
+        });
     },
 
-    login( args ) {
-        return new Promise( ( resolve, reject ) => {
-            if ( !args ) {
-                reject( new UsernameIsEmptyError() );
+    login(args) {
+        return new Promise((resolve, reject) => {
+            if (!args) {
+                reject(new UsernameIsEmptyError());
                 return;
             }
             let userName = "";
             let passwd = "";
             try {
-                [ userName, passwd ] = userPasswordFrom( args[ 0 ] );
-            } catch ( error ) {
-                reject( error );
+                [userName, passwd] = userPasswordFrom(args[0]);
+            } catch (error) {
+                reject(error);
                 return;
             }
-            if ( !userName ) {
-                reject( new UsernameIsEmptyError() );
+            if (!userName) {
+                reject(new UsernameIsEmptyError());
                 return;
             }
-            const matchingUser = userList.find( ( user ) => user.userId === userName );
-            if ( !matchingUser ) {
-                reject( new UnknownUserError() );
+            const matchingUser = userList.find((user) => user.userId === userName);
+            if (!matchingUser) {
+                reject(new UnknownUserError());
                 return;
             }
-            if ( matchingUser.password && matchingUser.password !== passwd ) {
-                reject( new InvalidPasswordError( userName ) );
+            if (matchingUser.password && matchingUser.password !== passwd) {
+                reject(new InvalidPasswordError(userName));
                 return;
             }
             userDatabase = matchingUser;
-            setHeader( "Login successful" );
+            setHeader("Login successful");
             resolve();
-        } );
+        });
     },
 
     logout() {
-        return new Promise( () => {
+        return new Promise(() => {
             location.reload();
-        } );
+        });
     },
 
     exit() {
-        return new Promise( () => {
+        return new Promise(() => {
             location.reload();
-        } );
+        });
     },
 
     mail() {
-        return new Promise( ( resolve, reject ) => {
+        return new Promise((resolve, reject) => {
             const messageList = [];
 
-            $.each( mailList, ( index, mail ) => {
-                if ( mail.to.includes( userDatabase.userId ) ) {
-                    messageList.push( `[${ index }] ${ mail.title }` );
+            $.each(mailList, (index, mail) => {
+                if (mail.to.includes(userDatabase.userId)) {
+                    messageList.push(`[${index}] ${mail.title}`);
                 }
-            } );
+            });
 
-            if ( messageList === "" ) {
-                reject( new MailServerIsEmptyError() );
+            if (messageList === "") {
+                reject(new MailServerIsEmptyError());
                 return;
             }
 
-            resolve( messageList );
-        } );
+            resolve(messageList);
+        });
     },
-
     archive(args) {
-        return new Promise( ( resolve, reject ) => {
-            const commandResult = [];
-            if (args.length === 0) {
-                //TODO: This displays as "uncaught promise" when other errors don't -- why?
-                reject(new NoArgumentsError());
-                return;
-            }
-            switch(args[0]) {
-                case "-help": // All available archive commands
-                $.each (archiveHelpList, (index, help) => {
-                    commandResult.push(`[ ${help.command} ]: ${help.description}`);
-                    commandResult.push(`usage: ${help.usage}`);
-                    commandResult.push("-----------------------------------------------------------------------------------------------------------------------");
-                });
-                    break;
-                case "-dweet":
-                    commandResult.push(renderDweet(args[1]));
-                    break;    
-                case "-search": // Get name and description of search term
-                    $.each (archiveList, (index, archive ) => {
-                    if(archive.title === args[1]) {
-                        commandResult.push( `[${ index }]` );
-                        if(archive.dweet) {
-                            commandResult.push( renderDweet(archive.dweet ));
-                        }
-                        if(archive.image) {
-                            commandResult.push( `<img align="left" src="config/network/${ serverDatabase.serverAddress }/images/${ archive.image }" width="125" height="125" style="padding: 0px 10000px 20px 0px">` )
-                        }
-                        commandResult.push( `${archive.description}` );
-                        
-                    }   
-                    });
-                    if(commandResult.length === 0) {
-                        reject(new ArchiveResultNotFoundError( args[1] ));
+        let foo = userDatabase;
+        let bar = serverDatabase;
+        return new Promise((resolve, reject) => {
+            checkUser(userDatabase.userId, "archive", (hasAccess) => {
+                if (hasAccess) {
+                    const commandResult = [];
+                    if (args.length === 0) {
+                        //TODO: This displays as "uncaught promise" when other errors don't -- why?
+                        reject(new NoArgumentsError());
                         return;
                     }
-                break;
-                case "-list":
-                    $.each (archiveList, (index) => {
-                        commandResult.push(`[${index}]`);
-                    })
-                    break;
-                case "-list-tags": // List all available tags
-                    var tagList = [];
-                    $.each (archiveList, (index, archive ) => {
-                        archive.tags.forEach(tag => {
-                            tagList.push(tag);
-                        })
-                    })
-                    var uniqueTagList = [...new Set(tagList)];
-                    uniqueTagList.forEach(tag => {
-                        commandResult.push(`[${tag}]`);
-                    })
-                    break;
-                case "-search-tags": // List all entries with specified tag
-                    $.each (archiveList, (index, archive ) => {
-                        archive.tags.forEach(tag => {
-                            if(tag === args[1]) {
-                                commandResult.push(`[${index}]`);
+                    switch (args[0]) {
+                        case "-help": // All available archive commands
+                            $.each(archiveHelpList, (index, help) => {
+                                commandResult.push(`[ ${help.command} ]: ${help.description}`);
+                                commandResult.push(`usage: ${help.usage}`);
+                                commandResult.push("-----------------------------------------------------------------------------------------------------------------------");
+                            });
+                            break;
+                        case "-dweet":
+                            commandResult.push(renderDweet(args[1]));
+                            break;
+                        case "-search": // Get name and description of search term
+                            $.each(archiveList, (index, archive) => {
+                                if (archive.title === args[1]) {
+                                    commandResult.push(`[${index}]`);
+                                    if (archive.dweet) {
+                                        commandResult.push(renderDweet(archive.dweet));
+                                    }
+                                    if (archive.image) {
+                                        commandResult.push(`<img align="left" src="config/network/${serverDatabase.serverAddress}/images/${archive.image}" width="125" height="125" style="padding: 0px 10000px 20px 0px">`)
+                                    }
+                                    commandResult.push(`${archive.description}`);
+
+                                }
+                            });
+                            if (commandResult.length === 0) {
+                                reject(new ArchiveResultNotFoundError(args[1]));
+                                return;
                             }
-                        })
-                        });
-                        if(commandResult.length === 0) {
-                            reject(new ArchiveResultNotFoundError( args[1] ));
+                            break;
+                        case "-list":
+                            $.each(archiveList, (index) => {
+                                commandResult.push(`[${index}]`);
+                            })
+                            break;
+                        case "-list-tags": // List all available tags
+                            var tagList = [];
+                            $.each(archiveList, (index, archive) => {
+                                archive.tags.forEach(tag => {
+                                    tagList.push(tag);
+                                })
+                            })
+                            var uniqueTagList = [...new Set(tagList)];
+                            uniqueTagList.forEach(tag => {
+                                commandResult.push(`[${tag}]`);
+                            })
+                            break;
+                        case "-search-tags": // List all entries with specified tag
+                            $.each(archiveList, (index, archive) => {
+                                archive.tags.forEach(tag => {
+                                    if (tag === args[1]) {
+                                        commandResult.push(`[${index}]`);
+                                    }
+                                })
+                            });
+                            if (commandResult.length === 0) {
+                                reject(new ArchiveResultNotFoundError(args[1]));
+                                return;
+                            }
+                            break;
+                        default:
+                            reject(new CommandNotFoundError());
                             return;
-                        }
-                    break;
-                default:
+                    }
+                    resolve(commandResult);
+                }
+                else {
                     reject(new CommandNotFoundError());
-                    return;
-            }
-            resolve(commandResult);
-        } );
+                }
+            })
+
+        });
     },
 
-    read( args ) {
-        return new Promise( ( resolve, reject ) => {
+    read(args) {
+        return new Promise((resolve, reject) => {
             const message = [];
 
             let readOption = false;
-            $.each( mailList, ( index, mail ) => {
-                if ( mail.to.includes( userDatabase.userId ) && Number( args[ 0 ] ) === index ) {
+            $.each(mailList, (index, mail) => {
+                if (mail.to.includes(userDatabase.userId) && Number(args[0]) === index) {
                     readOption = true;
-                    message.push( "---------------------------------------------" );
-                    message.push( `From: ${ mail.from }` );
-                    message.push( `To: ${ userDatabase.userId }@${ serverDatabase.terminalID }` );
-                    message.push( "---------------------------------------------" );
+                    message.push("---------------------------------------------");
+                    message.push(`From: ${mail.from}`);
+                    message.push(`To: ${userDatabase.userId}@${serverDatabase.terminalID}`);
+                    message.push("---------------------------------------------");
 
-                    $.each( mail.body.split( "  " ), ( _, line ) => {
-                        message.push( line );
-                    } );
+                    $.each(mail.body.split("  "), (_, line) => {
+                        message.push(line);
+                    });
                 }
-            } );
+            });
 
-            if ( !readOption ) {
-                reject( new InvalidMessageKeyError() );
+            if (!readOption) {
+                reject(new InvalidMessageKeyError());
                 return;
             }
 
-            resolve( message );
-        } );
+            resolve(message);
+        });
     },
 
-    ping( args ) {
-        return new Promise( ( resolve, reject ) => {
-            if ( args === "" ) {
-                reject( new AddressIsEmptyError() );
+    ping(args) {
+        return new Promise((resolve, reject) => {
+            if (args === "") {
+                reject(new AddressIsEmptyError());
                 return;
             }
 
-            $.get( `config/network/${ args }/manifest.json`, ( serverInfo ) => {
-                resolve( `Server ${ serverInfo.serverAddress } (${ serverInfo.serverName }) can be reached` );
-            } )
-                .fail( () => reject( new AddressNotFoundError( args ) ) );
-        } );
+            $.get(`config/network/${args}/manifest.json`, (serverInfo) => {
+                resolve(`Server ${serverInfo.serverAddress} (${serverInfo.serverName}) can be reached`);
+            })
+                .fail(() => reject(new AddressNotFoundError(args)));
+        });
     },
 
     telnet() {
-        return new Promise( ( _, reject ) => {
-            reject( new Error( "telnet is unsecure and is deprecated - use ssh instead" ) );
-        } );
+        return new Promise((_, reject) => {
+            reject(new Error("telnet is unsecure and is deprecated - use ssh instead"));
+        });
     },
 
-    ssh( args ) {
-        return new Promise( ( resolve, reject ) => {
-            if ( args === "" ) {
-                reject( new AddressIsEmptyError() );
+
+    ssh(args) {
+        return new Promise((resolve, reject) => {
+            if (args === "") {
+                reject(new AddressIsEmptyError());
                 return;
             }
             let userName = "";
             let passwd = "";
-            let serverAddress = args[ 0 ];
-            if ( serverAddress.includes( "@" ) ) {
-                const splitted = serverAddress.split( "@" );
-                if ( splitted.length !== 2 ) {
-                    reject( new InvalidCommandParameter( "ssh" ) );
+            let serverAddress = args[0];
+            if (serverAddress.includes("@")) {
+                const splitted = serverAddress.split("@");
+                if (splitted.length !== 2) {
+                    reject(new InvalidCommandParameter("ssh"));
                     return;
                 }
-                serverAddress = splitted[ 1 ];
+                serverAddress = splitted[1];
                 try {
-                    [ userName, passwd ] = userPasswordFrom( splitted[ 0 ] );
-                } catch ( error ) {
-                    reject( error );
+                    [userName, passwd] = userPasswordFrom(splitted[0]);
+                } catch (error) {
+                    reject(error);
                     return;
                 }
             }
-            kernel.connectToServer( serverAddress, userName, passwd ).then( resolve ).catch( reject );
-        } );
+            kernel.connectToServer(serverAddress, userName, passwd).then(resolve).catch(reject);
+        });
     }
 };
 
-function userPasswordFrom( creds ) {
-    if ( !creds.includes( ":" ) ) {
-        return [ creds, "" ];
+function checkUser(userName, program, callback) {
+    $.get("config/software.json", (softwareData) => {
+      const softwareList = softwareData.software;
+  
+      let users = [];
+  
+      softwareList.forEach((app) => {
+        if (app.title === program) {
+          app["approved-users"].forEach((user) => {
+            if (user === userName) {
+              users.push(user);
+            }
+          });
+        }
+      });
+  
+      const hasAccess = users.length > 0;
+  
+      callback(hasAccess);
+    }).fail((err, msg, details) => {
+      console.error(err, msg, details);
+      callback(false); // Failed to retrieve software list
+    });
+  }
+function userPasswordFrom(creds) {
+    if (!creds.includes(":")) {
+        return [creds, ""];
     }
-    const splitted = creds.split( ":" );
-    if ( splitted.length !== 2 ) {
+    const splitted = creds.split(":");
+    if (splitted.length !== 2) {
         throw new InvalidCredsSyntaxError();
     }
     return splitted;
@@ -608,19 +642,19 @@ function userPasswordFrom( creds ) {
  * @param {String} progName The software name
  * @param {String} args Args to be handled if any
  */
-function software( progName, args ) {
-    return new Promise( ( resolve, reject ) => {
-        const program = allowedSoftwares()[ progName ];
-        if ( program ) {
-            if ( program.clear ) {
-                system.clear().then( runSoftware( progName, program, args ).then( resolve, reject ) );
+function software(progName, args) {
+    return new Promise((resolve, reject) => {
+        const program = allowedSoftwares()[progName];
+        if (program) {
+            if (program.clear) {
+                system.clear().then(runSoftware(progName, program, args).then(resolve, reject));
             } else {
-                runSoftware( progName, program, args ).then( resolve, reject );
+                runSoftware(progName, program, args).then(resolve, reject);
             }
         } else {
-            reject( new CommandNotFoundError( progName ) );
+            reject(new CommandNotFoundError(progName));
         }
-    } );
+    });
 }
 
 /**
@@ -630,27 +664,27 @@ function software( progName, args ) {
  * @param {Object} program Command definition from sofwtare.json
  * @param {String} args Args to be handled if any
  */
-function runSoftware( progName, program, args ) {
-    return new Promise( ( resolve ) => {
+function runSoftware(progName, program, args) {
+    return new Promise((resolve) => {
         let msg;
-        if ( program.message ) {
+        if (program.message) {
             msg = { text: program.message, delayed: program.delayed };
         } else {
-            msg = window[ progName ]( args );
-            if ( msg.constructor === Object ) {
-                if ( !msg.onInput ) {
-                    throw new Error( "An onInput callback must be defined!" );
+            msg = window[progName](args);
+            if (msg.constructor === Object) {
+                if (!msg.onInput) {
+                    throw new Error("An onInput callback must be defined!");
                 }
-                if ( msg.message ) {
-                    output( msg.message );
+                if (msg.message) {
+                    output(msg.message);
                 }
-                readPrompt( msg.prompt || ">" ).then( ( input ) => msg.onInput( input ) )
-                    .then( ( finalMsg ) => resolve( finalMsg ) );
+                readPrompt(msg.prompt || ">").then((input) => msg.onInput(input))
+                    .then((finalMsg) => resolve(finalMsg));
                 return;
             }
         }
-        resolve( msg );
-    } );
+        resolve(msg);
+    });
 }
 
 /**
@@ -658,21 +692,21 @@ function runSoftware( progName, program, args ) {
  *
  * @param {String} promptText The text prefix to display before the <input> prompt
  */
-function readPrompt( promptText ) {
-    return new Promise( ( resolve ) => {
-        const prevPromptText = $( "#input-line .prompt" ).text();
-        $( "#input-line .prompt" ).text( promptText );
+function readPrompt(promptText) {
+    return new Promise((resolve) => {
+        const prevPromptText = $("#input-line .prompt").text();
+        $("#input-line .prompt").text(promptText);
         term.removeCmdLineListeners();
-        cmdLine_.addEventListener( "keydown", promptSubmitted );
-        function promptSubmitted( e ) {
-            if ( e.keyCode === 13 ) {
-                cmdLine_.removeEventListener( "keydown", promptSubmitted );
+        cmdLine_.addEventListener("keydown", promptSubmitted);
+        function promptSubmitted(e) {
+            if (e.keyCode === 13) {
+                cmdLine_.removeEventListener("keydown", promptSubmitted);
                 term.addCmdLineListeners();
-                $( "#input-line .prompt" ).text( prevPromptText );
-                resolve( this.value.trim() );
+                $("#input-line .prompt").text(prevPromptText);
+                resolve(this.value.trim());
             }
         }
-    } );
+    });
 }
 
 /**
@@ -680,13 +714,13 @@ function readPrompt( promptText ) {
  */
 function allowedSoftwares() {
     const softwares = {};
-    for ( const app in softwareInfo ) {
-        const program = softwareInfo[ app ];
+    for (const app in softwareInfo) {
+        const program = softwareInfo[app];
         if (
-            ( !program.location || program.location.includes( serverDatabase.serverAddress ) ) &&
-            ( !program.protection || program.protection.includes( userDatabase.userId ) )
+            (!program.location || program.location.includes(serverDatabase.serverAddress)) &&
+            (!program.protection || program.protection.includes(userDatabase.userId))
         ) {
-            softwares[ app ] = program;
+            softwares[app] = program;
         }
     }
     return softwares;
@@ -705,41 +739,41 @@ const C = Math.cos;
 const S = Math.sin;
 const T = Math.tan;
 
-function dweet( u, width, height ) {
+function dweet(u, width, height) {
     width = width || 200;
     height = height || 200;
-    const id = Date.now().toString( 36 );
+    const id = Date.now().toString(36);
     let frame = 0;
     let nextFrameMs = 0;
-    function loop( frameTime ) {
+    function loop(frameTime) {
         frameTime = frameTime || 0;
-        const c = document.getElementById( id );
-        if ( !c ) {
+        const c = document.getElementById(id);
+        if (!c) {
             return;
         }
-        requestAnimationFrame( loop );
-        if ( frameTime < nextFrameMs - epsilon ) {
+        requestAnimationFrame(loop);
+        if (frameTime < nextFrameMs - epsilon) {
             return; // Skip this cycle as we are animating too quickly.
         }
-        nextFrameMs = Math.max( nextFrameMs + 1000 / FPS, frameTime );
+        nextFrameMs = Math.max(nextFrameMs + 1000 / FPS, frameTime);
         let time = frame / FPS;
-        if ( time * FPS | frame - 1 === 0 ) {
+        if (time * FPS | frame - 1 === 0) {
             time += 0.000001;
         }
         frame++;
-        const x = c.getContext( "2d" );
+        const x = c.getContext("2d");
         x.fillStyle = "white";
         x.strokeStyle = "white";
         x.beginPath();
         x.resetTransform();
-        x.clearRect( 0, 0, width, height ); // clear canvas
-        u( time, x, c );
+        x.clearRect(0, 0, width, height); // clear canvas
+        u(time, x, c);
     }
-    setTimeout( loop, 50 ); // Small delay to let time for the canvas to be inserted
-    return `<div id=canvas-container><canvas id="${ id }" width="${ width }" height="${ height }"></div>`;
+    setTimeout(loop, 50); // Small delay to let time for the canvas to be inserted
+    return `<div id=canvas-container><canvas id="${id}" width="${width}" height="${height}"></div>`;
 }
 
-function R( r, g, b, a ) {
+function R(r, g, b, a) {
     a = typeof a === "undefined" ? 1 : a;
-    return `rgba(${ r | 0 },${ g | 0 },${ b | 0 },${ a })`;
+    return `rgba(${r | 0},${g | 0},${b | 0},${a})`;
 }
